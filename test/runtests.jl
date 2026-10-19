@@ -1,6 +1,7 @@
 using Epidemic
 using Test
+using Agents
 
 @testset "Epidemic.jl" begin
-    # Write your tests here.
+    include("test_seirs.jl")
 end
