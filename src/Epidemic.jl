@@ -1,13 +1,11 @@
 module Epidemic
 
 using Agents
-using Random
+using Random      
 
-include("agent.jl")
+include("agent_model.jl")
 
-# Public API
-export HealthStatus, susceptible, exposed, infected, recovered
-export Person, ModelParams
-export initialize_model, agent_step!
+export initialize_model, Person, HealthStatus,
+       susceptible, exposed, infected, recovered
 
 end

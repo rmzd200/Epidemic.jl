@@ -83,7 +83,7 @@ function message_etat(n)
 end
 
 # Un curseur avec son nom et sa valeur
-function curseur(nom, plage, defaut)
+function curseur(nom, plage, defaut) #plage : les valeurs possibles et defaut c st le nombre au debut
     s = Bonito.Slider(plage; value = defaut)
     ligne = DOM.div(nom, DOM.span(map(string, s.value); class = "val"), s;
                     style = "margin-bottom:22px;")
