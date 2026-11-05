@@ -3,7 +3,7 @@ module Epidemic
 using Agents
 using Random
 
-include("agent.jl")
+include("model_agent.jl")
 
 # Public API
 export HealthStatus, susceptible, exposed, infected, recovered
