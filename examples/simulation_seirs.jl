@@ -81,12 +81,12 @@ end
 
 model_basic = initialize_model(
     seed = SEED,
-    strategy = Epidemic.BasicTransmission
+    strategy = BasicTransmission(),
 )
 
 model_protected = initialize_model(
     seed = SEED,
-    strategy = Epidemic.ProtectedTransmission
+    strategy = ProtectedTransmission(),
 )
 
 
