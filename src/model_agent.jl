@@ -320,22 +320,3 @@ function initialize_model(;
 
     return model
 end
-
-# ============================================================
-# 7. Display
-# ============================================================
-function Base.show(io::IO, p::ModelParams)
-    print(io, "ModelParams(strategy=$(p.strategy), infectiousness=$(p.infectiousness), ",
-          "latency=$(p.latency_period), duration=$(p.duration), ",
-          "recover=$(p.chance_recover), immunity=$(p.immunity_duration))")
-end
-
-function Base.show(io::IO, a::Person)
-    print(io, "Person(id=$(a.id), pos=$(a.pos), status=$(a.status), age=$(a.age), ",
-          "mask=$(a.wearing_mask), vaccinated=$(a.vaccinated))")
-end
-
-function Base.show(io::IO, a::Doctor)
-    print(io, "Doctor(id=$(a.id), pos=$(a.pos), status=$(a.status), age=$(a.age), ",
-          "mask=$(a.wearing_mask), vaccinated=$(a.vaccinated), ppe=$(a.ppe_protection))")
-end
