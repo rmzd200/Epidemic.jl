@@ -11,10 +11,26 @@ using Agents
         @test count(a -> a.status == susceptible, allagents(model))==140
         @test count(a -> a.status == infected, allagents(model))==10
         
-        # Test invalide parameters
-        @test_throws AssertionError initialize_model(duration= -3)
-        @test_throws AssertionError initialize_model( infectiousness=1.5)
-        @test_throws AssertionError initialize_model( initial_infected=200)
+    end
+    @testset "Invalid parameters" begin
+        # Population
+        @test_throws ArgumentError initialize_model(n_agents=-1)
+        @test_throws ArgumentError initialize_model( initial_infected=-1)
+        @test_throws ArgumentError initialize_model( initial_infected=200)
+        @test_throws ArgumentError initialize_model(carrying_capacity=100)
+        #Durations
+        @test_throws ArgumentError initialize_model(latency_period=0)
+        @test_throws ArgumentError initialize_model(duration=-3)
+        @test_throws ArgumentError initialize_model(immunity_duration=0)
+        @test_throws ArgumentError initialize_model(max_age=0)
+        #Probailities
+        @test_throws ArgumentError initialize_model(infectiousness=1.5)
+        @test_throws ArgumentError initialize_model(chance_recover=-0.2)
+        @test_throws ArgumentError initialize_model(birth_rate=1.2)
+        @test_throws ArgumentError initialize_model(mask_probability=-0.5)
+        @test_throws ArgumentError initialize_model(mask_effectiveness=1.5)
+        @test_throws ArgumentError initialize_model(vaccination_probability=1.2)
+        @test_throws ArgumentError initialize_model(vaccine_effectiveness=-0.1)
 
     end
 
