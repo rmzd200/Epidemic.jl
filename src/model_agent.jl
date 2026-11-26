@@ -36,7 +36,12 @@ struct ModelParams
     strategy::Type{<:TransmissionStrategy}
 end
 
-
+#Paremter validation:
+ function _require(condition:: Bool,message::AbstractString)
+    condition || throw(ArgumentError(message))
+    return nothing
+ end
+_is_probability(x::Real)=0<=x<=1
 
 function initialize_model(;
     dims = (10, 10),
@@ -59,20 +64,34 @@ function initialize_model(;
 )   
 
   
-    # validate model parameters
-    @assert 0 <= initial_infected <= n_agents <= carrying_capacity
-    @assert latency_period>0
-    @assert  duration >0
-    @assert  immunity_duration>0 
-    @assert max_age>0
+    
+# validate population
+_require(n_agents >= 0,"n_agents must be >= 0 (got $n_agents)")
+_require(initial_infected >=0,"initial infected must be >=0(got $initial_infected)")
+_require(initial_infected <= n_agents, "initial infected must be <=n_agents")
+_require(n_agents <= carrying_capacity,"n_agents must be <=carrying_capacity")
 
-    @assert  0<= infectiousness<=1
-    @assert  0<= chance_recover<=1
-    @assert  0<= birth_rate<=1
-    @assert  0<= mask_probability<=1
-    @assert  0<= mask_effectiveness<=1
-    @assert  0<= vaccination_probability<=1  
-    @assert  0<= vaccine_effectiveness<=1
+#validate duration
+_require(latency_period > 0,"letency_period must be positive(got $latency_period)")
+_require(duration > 0, "duration must be positive(got $duration)")
+_require(immunity_duration > 0,"imunity_duration must be positive (got $immunity_duration)")
+_require(max_age > 0,"max age must be positive(got_max_age)")
+
+
+#validate probabilities
+for (name,value)in (
+     ("infectiousness", infectiousness),
+     ("chance_recover",chance_recover),    
+     ("birth_rate",birth_rate),
+     ("mask_probability",mask_probability),
+     ("mask_effectiveness",mask_effectiveness),
+     (" vaccination_probability", vaccination_probability),
+     ("vaccine_effectiveness",vaccine_effectiveness)
+)
+   _require(_is_probability(value),
+   "$name must be between o and 1 (got $value)")
+end
+
     # NetLogo uses a periodic toroidal grid where multiple agents can share a patch
     space = GridSpace(dims; periodic = true)
     
@@ -168,8 +187,8 @@ end
 
 # Same function for different type of infection 
 function transmission_probability( 
-    source::Person, # the infected agent
-    target::Person, # The 
+    source::Person,  # Infected agent transmitting the virus
+    target::Person,  # Susceptible agent at risk of infection
     params::ModelParams,
     ::Type{BasicTransmission}
 )  
@@ -252,4 +271,3 @@ function agent_step!(agent::Person, model)
     # E. Reproduction (Demographic Birth)
     reproduce!(agent,model)
 end
-
